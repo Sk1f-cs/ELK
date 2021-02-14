@@ -1,0 +1,11 @@
+server.port: 5601
+
+server.host: "localhost"
+
+kibana.index: ".kibana"
+
+#logging.dest: stdout
+logging.dest: /var/log/kibana
+logging.rotate.enabled: true
+logging.rotate.keepFiles: 7
+
