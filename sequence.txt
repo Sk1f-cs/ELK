@@ -104,6 +104,10 @@ https://www.elastic.co/guide/en/beats/libbeat/7.10/getting-started.html
 Auditbeat - https://www.elastic.co/guide/en/beats/auditbeat/7.10/auditbeat-installation-configuration.html
 conf - /etc/auditbeat/auditbeat.yml
 /usr/bin# auditbeat test config -e
+OR
+sudo auditbeat test config
+sudo auditbeat test output
+
 
 - Identity changes addition
 	-w /etc/elasticsearch/elasticsearch.yml -p wa -k elk_changes
