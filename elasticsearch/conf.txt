@@ -1,0 +1,7 @@
+cluster.name: my-application
+node.name: node-1
+# ----------------------------------- Paths ------------------------------------
+path.data: /var/lib/elasticsearch
+path.logs: /var/log/elasticsearch
+# ---------------------------------- Various -----------------------------------
+action.auto_create_index: true
