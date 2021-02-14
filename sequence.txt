@@ -1,0 +1,208 @@
+Installation Orderedit
+Install the Elastic Stack products you want to use in the following order:
+
+	1.Elasticsearch 
+	2.Kibana 
+	3.Logstash 
+	4.Beats 
+	5.APM Server 
+	6.Elasticsearch Hadoop 
+Installing in this order ensures that the components each product depends on are in place.
+
+-						-=== Elasticsearch ===-
+
+https://www.elastic.co/guide/en/elasticsearch/reference/7.10/deb.html
+
+Log files can be found in /var/log/elasticsearch/
+
+cat /var/log/elasticsearch/elasticsearch.log
+OR
+tail -f /var/log/elasticsearch/elasticsearch.log
+
+curl -X GET "localhost:9200/?pretty" - to check.
+
+
+Conf
+/etc/elasticsearch/elasticsearch.yml
+
+https://www.elastic.co/guide/en/elasticsearch/reference/7.10/settings.html
+
+
+						-=== Kibana ===-
+
+https://www.elastic.co/guide/en/kibana/7.10/install.html
+
+Log information can be accessed via journalctl -u kibana.service
+
+Conf
+/etc/kibana/kibana.yml
+
+logging.dest: /var/log/kibana    
+logging.rotate.enabled: true
+logging.rotate.keepFiles: 7
+
+touch /var/log/kibana
+chown kibana:kibana /var/log/kibana
+
+
+
+
+
+https://www.elastic.co/guide/en/kibana/7.10/settings.html
+
+ALERTING SETTINGS ->>> https://www.elastic.co/guide/en/kibana/7.10/alert-action-settings-kb.html
+
+
+-=== Logstash ===-
+
+https://www.elastic.co/guide/en/logstash/7.10/installing-logstash.html
+
+
+https://www.elastic.co/guide/en/logstash/7.10/running-logstash.html
+
+Conf
+sudo nano /etc/logstash/logstash.yml
+
+Simple-conf
+https://www.elastic.co/guide/en/logstash/7.10/configuration.html
+
+basic Logstash pipeline
+/usr/share/logstash/bin/logstash -e 'input { stdin { } } output { stdout {} }'
+
+Advanced-pipeline
+https://www.elastic.co/guide/en/logstash/7.10/advanced-pipeline.html
+
+/usr/share/logstash/bin/logstash -f first-pipeline.conf --config.test_and_exit
+
+
+
+/usr/share/logstash/bin/logstash -f first-pipeline.conf --config.reload.automatic
+
+
+sudo filebeat -e -c filebeat.yml -d "publish"
+
+
+curl -XGET 'localhost:9200/logstash-2021.02.08-000001/_search?pretty&q=response=200'
+
+
+curl -XGET 'localhost:9200/logstash-2021.02.08/_search?pretty&q=geoip.city_name=Buffalo'
+
+
+tail -f /var/log/logstash/logstash-plain.log
+
+
+Bin location /usr/share/logstash/bin
+
+
+
+							-=== Beats ===-
+
+https://www.elastic.co/guide/en/beats/libbeat/7.10/getting-started.html
+
+							-=== Auditbeat ===-
+
+Auditbeat - https://www.elastic.co/guide/en/beats/auditbeat/7.10/auditbeat-installation-configuration.html
+conf - /etc/auditbeat/auditbeat.yml
+/usr/bin# auditbeat test config -e
+
+- Identity changes addition
+	-w /etc/elasticsearch/elasticsearch.yml -p wa -k elk_changes
+    -w /etc/kibana/kibana.yml -p wa -k elk_changes
+
+exclude_files:
+ - '([^\s]+).reference.yml'
+
+setup.dashboards.enabled: true 
+
+Settings for metricbeat:
+http.enabled: true
+http.port: 5066
+
+
+
+							-=== Filebeat ===-
+
+
+Filebeat - https://www.elastic.co/guide/en/beats/filebeat/7.10/filebeat-installation-configuration.html
+conf - /etc/filebeat/filebeat.yml
+
+
+
+reload.enabled: true
+reload.period: 10s
+
+
+setup.dashboards.enabled: true
+
+
+setup.kibana:
+  host: "localhost:5601"
+
+
+output.elasticsearch:
+hosts: ["localhost:9200"]
+protocol: "http"
+
+logging.files:
+path: /var/log/filebeat
+name: filebeat
+keepfiles: 7
+permissions: 0644
+
+
+cd /usr/bin/
+	filebeat test config -e
+
+
+
+filebeat modules list
+
+filebeat modules enable elasticsearch system
+
+sudo nano /etc/filebeat/modules.d/elasticsearch.yml
+
+filebeat setup -e
+sudo service filebeat start
+
+
+
+							-=== Metricbeat ===-
+
+https://www.elastic.co/guide/en/beats/metricbeat/7.10/metricbeat-installation-configuration.html
+
+Conf - sudo nano /etc/metricbeat/metricbeat.yml
+
+logging.to_files: true
+logging.files:
+path: /var/log/metricbeat
+name: metricbeat
+keepfiles: 7
+permissions: 0644
+
+
+	cd /usr/bin/
+	metricbeat test config -e
+
+metricbeat modules list
+metricbeat modules enable name name name
+
+
+metricbeat setup -e
+
+https://www.elastic.co/guide/en/beats/metricbeat/7.10/metricbeat-starting.html
+
+
+
+
+
+
+
+
+
+
+
+
+								---================---
+
+
+
