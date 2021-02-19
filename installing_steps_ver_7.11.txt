@@ -72,5 +72,230 @@ Changed password for user elastic
 PASSWORD elastic = 5f8pVLPOpYbQIKThygpY
 
 
+### Beats
 
+# metricbeat
+
+sudo apt-get install metricbeat
+
+sudo nano /etc/elasticsearch/elasticsearch.yml
+
+xpack.monitoring.collection.enabled: true
+xpack.monitoring.elasticsearch.collection.enabled: true
+# two lines at the end of elasticsearch config file.
+
+sudo nano /etc/metricbeat/metricbeat.yml
+reload.enabled: true 
+reload.period: 10s
+
+setup.dashboards.enabled: true 
+
+setup.kibana:
+    host: "localhost:5601"
+
+#Elasticsearch outputs
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["localhost:9200"]
+
+  # Protocol - either `http` (default) or `https`.
+  protocol: "http"
+
+username: "elastic"
+password: "5f8pVLPOpYbQIKThygpY"
+
+#metricbeat.logging
+
+logging.level: debug
+logging.selectors: ["*"]
+
+# x-pack monitoring
+monitoring.enabled: true 
+
+monitoring.elasticsearch:   # just uncomment
+
+cd /usr/bin/
+metricbeat test config -e
+
+# Configure metricbeat modules
+cd /etc/metricbeat/modules.d/
+
+/etc/metricbeat/modules.d/beat-xpack.yml
+
+- module: beat
+  xpack.enabled: true
+  period: 10s
+  hosts: ["http://localhost:5067", "http://localhost:5068"]
+
+  username: "beats_system"                     
+  password: "bS7Mb9NzVznDbHr0UtBU"
+
+
+sudo metricbeat modules list
+
+sudo metricbeat modules enable elasticsearch-xpack kibana-xpack beat-xpack
+
+sudo nano elasticsearch-xpack.yml
+
+username: "remote_monitoring_user"
+password: "sxrMiaf33vdUAhFPaEaG"
+
+sudo nano kibana-xpack.yml
+
+username: "remote_monitoring_user"
+password: "sxrMiaf33vdUAhFPaEaG"
+
+sudo nano kibana-xpack.yml
+
+username: "beats_system"
+password: "bS7Mb9NzVznDbHr0UtBU"
+
+
+
+# Filebeat
+
+# changing logging of kibana
+sudo nano /etc/kibana/kibana.yml
+
+
+# in logging section
+logging.dest: /var/log/kibana    
+logging.rotate.enabled: true
+logging.rotate.keepFiles: 7
+
+sudo touch /var/log/kibana
+sudo chown kibana:kibana /var/log/kibana   #changing ownership for user:group
+
+
+sudo apt-get install filebeat
+
+sudo nano /etc/filebeat/filebeat.yml
+
+#== Filebeat modules ==
+reload.enabled: true 
+
+setup.dashboards.enabled: true
+
+#kibana section
+host: "localhost:5601" # because filebeat installed locally
+
+#elasticsearch output section
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["localhost:9200"]
+
+  # Protocol - either `http` (default) or `https`.
+  protocol: "http"
+
+
+username: "elastic"
+password: "5f8pVLPOpYbQIKThygpY"
+
+#logging section
+
+logging.level: debug
+logging.selectors: ["*"]
+
+logging.files:
+path: /var/log/filebeat
+name: filebeat
+keepfiles: 7
+permissions: 0644
+
+http.enabled: true #for metricbeat
+http.port: 5067
+
+sudo filebeat modules enable elasticsearch kibana system
+
+
+# Auditbeat
+
+sudo apt-get install auditbeat
+
+sudo nano /etc/auditbeat/auditbeat.yml  #conf
+
+## Identity changes.
+    -w /etc/group -p wa -k identity
+    -w /etc/passwd -p wa -k identity
+    -w /etc/gshadow -p wa -k identity
+
+    -w /etc/elasticsearch/elasticsearch.yml -p wa -k elk_changes #changes for elasticsearch
+
+    -w /etc/kibana/kibana.yml -p wa -k elk_changes
+
+
+## Unauthorized access attempts.
+    -a always,exit -F arch=b64 -S open,creat,truncate,ftruncate,openat,open_by_handle_at -F exit=-EACCES -k access
+    -a always,exit -F arch=b64 -S open,creat,truncate,ftruncate,openat,open_by_handle_at -F exit=-EPERM -k access
+
+#file_integrity
+
+exclude_files:
+ - '([^\s]+).reference.yml'
+
+setup.dashboards.enabled: true 
+
+setup.kibana:
+
+    host: "localhost:5601"
+
+#Elasticsearch output
+protocol: "http"
+
+username: "elastic"
+password: "5f8pVLPOpYbQIKThygpY"
+
+
+#logging
+
+logging.to_files: true
+  logging.files:
+   path: /var/log/auditbeat
+   name: auditbeat
+   keepfiles: 7
+   permissions: 0644
+
+http.enabled: true
+http.port: 5068
+
+sudo auditbeat test config
+sudo auditbeat test output
+
+
+
+#memory troubles in elasticsearch 
+#at this point eating 7 out of 7.5 gb
+
+sudo nano /etc/elasticsearch/jvm.options
+
+## jvm.options.d directory containing these lines:
+## changed from 4g
+-Xms2g
+-Xmx2g
+
+sudo mkdir /etc/systemd/system/elasticsearch.service.d
+sudo nano /etc/systemd/system/elasticsearch.service.d/elasticsearch.conf
+
+
+[Service]
+LimitNOFILE=65536 
+LimitNPROC=4096
+LimitMEMLOCK=infinity
+LimitFSIZE=infinity
+LimitAS=infinity
+
+sudo sysctl vm.max_map_count #default 262144
+
+
+# some troubleshooting :
+   sudo /usr/share/kibana/bin/kibana --allow-root
+   sudo /usr/share/elasticsearch/bin/elasticsearch --allow-root
+
+
+## memory usage dropped to 6gb out of 7.5gb
+
+-Xms2g
+-Xmx2g 
+#changed value to further down to 1g - 
+# now system is usable
 
