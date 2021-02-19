@@ -1,4 +1,6 @@
+#######################
 # Elasticsearch
+#######################
 
 sudo apt-get update && sudo apt-get install elasticsearch
 
@@ -22,7 +24,9 @@ sudo curl -X GET "0.0.0.0:9200/?pretty" -u elastic:5f8pVLPOpYbQIKThygpY
 
 sudo journalctl --unit elasticsearch
 
+#######################
 ## Kibana
+#######################
 
 sudo apt-get update && sudo apt-get install kibana
 
@@ -34,7 +38,9 @@ server.host: "0.0.0.0"
 server.name: "sk1f_kibana"
 elasticsearch.hosts: ["http://localhost:9200"]
 
+#######################
 ### X-pack security
+#######################
 
 xpack.security.enabled
 
@@ -71,10 +77,11 @@ PASSWORD remote_monitoring_user = sxrMiaf33vdUAhFPaEaG
 Changed password for user elastic
 PASSWORD elastic = 5f8pVLPOpYbQIKThygpY
 
-
+#######################
 ### Beats
-
+#######################
 # metricbeat
+#######################
 
 sudo apt-get install metricbeat
 
@@ -151,8 +158,9 @@ username: "beats_system"
 password: "bS7Mb9NzVznDbHr0UtBU"
 
 
-
+#######################
 # Filebeat
+#######################
 
 # changing logging of kibana
 sudo nano /etc/kibana/kibana.yml
@@ -172,6 +180,7 @@ sudo apt-get install filebeat
 sudo nano /etc/filebeat/filebeat.yml
 
 #== Filebeat modules ==
+
 reload.enabled: true 
 
 setup.dashboards.enabled: true
@@ -207,8 +216,10 @@ http.port: 5067
 
 sudo filebeat modules enable elasticsearch kibana system
 
-
+#######################
 # Auditbeat
+#######################
+
 
 sudo apt-get install auditbeat
 
