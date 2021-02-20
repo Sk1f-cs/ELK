@@ -1,0 +1,27 @@
+
+/etc/audit/audit.rules - audit rules to be loaded at startup
+/etc/audit/auditd.conf - configuration file for audit daemon
+/etc/sysconfig/auditd  - additional configuration file
+
+-w      # to start watcher on file
+-p wra      #to specify the permission, w-write, r-read, a-attrubute changed
+-k     # optional key, eve
+
+
+#===- Testing -===
+
+auditctl -w /etc/passwd -p wra -k passwd
+
+auditctl -l
+
+cat /var/log/audit/audit.log        # to see log files
+
+/etc/audit/auditd.conf      # config file
+detailed description about conf settings - https://linux.die.net/man/8/auditd.conf
+
+now editing auditbeat conf in /etc/auditbeat/auditbeat.yml to use same rule
+
+#auditd replaced by auditbeat
+service auditd stop
+service auditbeat start
+
