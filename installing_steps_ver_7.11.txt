@@ -75,7 +75,7 @@ Changed password for user remote_monitoring_user
 PASSWORD remote_monitoring_user = sxrMiaf33vdUAhFPaEaG
 
 Changed password for user elastic
-PASSWORD elastic = 5f8pVLPOpYbQIKThygpY
+PASSWORD elastic = 5f8pVLPOpYbQIKThygpY 
 
 #######################
 ### Beats
@@ -270,8 +270,33 @@ http.enabled: true
 http.port: 5068
 
 sudo auditbeat test config
+
+
 sudo auditbeat test output
 
+
+#######################
+# Packetbeat
+#######################
+
+
+sudo apt-get update && sudo apt-get install packetbeat
+
+sudo systemctl enable packetbeat
+
+sudo nano /etc/packetbeat/packetbeat.yml
+
+http.enabled: true
+http.port: 5069
+
+sudo nano /etc/metricbeat/modules.d/beat-xpack.yml
+
+# to add new host with port 5069
+
+https://www.elastic.co/guide/en/beats/packetbeat/current/packetbeat-geoip.html
+
+
+#######################
 
 
 #memory troubles in elasticsearch 
