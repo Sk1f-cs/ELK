@@ -49,7 +49,7 @@ in
 /etc/elasticsearch/elasticsearch.yml
 
 cd /usr/share/elasticsearch/bin
-sudo ./elasticsearch-setup-passwords
+sudo ./elasticsearch-setup-passwords # auto or interactive
 
 Commands
 --------
@@ -76,6 +76,9 @@ PASSWORD remote_monitoring_user = sxrMiaf33vdUAhFPaEaG
 
 Changed password for user elastic
 PASSWORD elastic = 5f8pVLPOpYbQIKThygpY 
+
+
+#-=== For VB : 3last1c
 
 #######################
 ### Beats
@@ -147,10 +150,6 @@ sudo nano elasticsearch-xpack.yml
 username: "remote_monitoring_user"
 password: "sxrMiaf33vdUAhFPaEaG"
 
-sudo nano kibana-xpack.yml
-
-username: "remote_monitoring_user"
-password: "sxrMiaf33vdUAhFPaEaG"
 
 sudo nano kibana-xpack.yml
 
@@ -213,6 +212,9 @@ permissions: 0644
 
 http.enabled: true #for metricbeat
 http.port: 5067
+
+cd /usr/bin/
+sudo filebeat test config -e
 
 sudo filebeat modules enable elasticsearch kibana system
 
@@ -285,6 +287,22 @@ sudo apt-get update && sudo apt-get install packetbeat
 sudo systemctl enable packetbeat
 
 sudo nano /etc/packetbeat/packetbeat.yml
+
+setup.dashboards.enabled: true 
+
+host: "localhost:5601"
+
+#Elasticsearch output
+protocol: "http"
+
+#logging
+logging.files:
+   path: /var/log/packetbeat
+   name: packetbeat
+   keepfiles: 7
+   permissions: 0644
+
+
 
 http.enabled: true
 http.port: 5069
