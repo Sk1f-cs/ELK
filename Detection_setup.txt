@@ -16,4 +16,77 @@ p - elast1c
 # be a zip file containing individual files for the CA certificate and private key
 
 # Please enter the desired output file [elastic-stack-ca.p12]: 3last1c
-# Enter password for 3last1c : 
+
+# 2. Generate a certificate and private key for each node in your cluster
+sudo /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca elast1c-stack-ca.p12
+
+
+### /usr/share/elasticsearch/elast1c-stack-ca.p12    ### -location
+
+Enter password for CA (elastic-stack-ca.p12) : elast1c
+Please enter the desired output file [elastic-certificates.p12]: 
+Enter password for elastic-certificates.p12 : elast1c
+########
+######## Certificates written to /usr/share/elasticsearch/elast1c-certificates.p12 ########
+########
+This file should be properly secured as it contains the private key for 
+your instance.
+
+This file is a self contained file and can be copied and used 'as is'
+For each Elastic product that you wish to configure, you should copy
+this '.p12' file to the relevant configuration directory
+and then follow the SSL configuration instructions in the product guide.
+
+For client applications, you may only need to copy the CA certificate and
+configure the client to trust this certificate.
+
+# After this:
+sudo nano /etc/elasticsearch/elasticsearch.yml
+
+#####################
+
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate 
+xpack.security.transport.ssl.keystore.path: /usr/share/elasticsearch/elastic-certificates.p12 
+xpack.security.transport.ssl.truststore.path: /usr/share/elasticsearch/elastic-certificates.p12 
+
+
+#
+
+#/usr/share/elasticsearch/bin/elasticsearch-keystore add xpack.security.transport.ssl.keystore.elast1c
+
+#/usr/share/elasticsearch/bin/elasticsearch-keystore add xpack.security.transport.ssl.truststore.elast1c
+
+# OR
+#bin/elasticsearch-keystore add xpack.security.transport.ssl.keystore.elast1c
+
+#bin/elasticsearch-keystore add xpack.security.transport.ssl.truststore.elast1c
+
+#
+
+#/etc/elasticsearch/elasticsearch-keystore add xpack.security.transport.ssl.keystore.elast1c
+
+#/etc/elasticsearch/elasticsearch-keystore add xpack.security.transport.ssl.truststore.elast1c
+
+######################
+
+#xpack.security.enabled: true
+
+
+/var/log/elasticsearch/sk1f_cluster.log
+
+
+sudo journalctl --unit elasticsearch --since  "2021-03-06 04:10:16"
+
+
+sudo chown elasticsearch:elasticsearch /etc/elasticsearch/elast1c-certificates.p12
+
+
+kibana.keystore:
+
+DnrClCZG64YYWI3B07DF9VLiTER62DdClMHlrCRbsGqiD8Inpd7wGDbJ25Y4YjyomkoKpeAXuLDnEVK8wb0BAprJMQWxjh0OQYHMpPYnug+XSnXAoEt5hTAGbK7JeA==
+
+
+# in kibana.yml :
+
+elasticsearch.ssl.truststore.path: "/etc/elasticsearch/elast1c-certificates.p12"
