@@ -22,7 +22,7 @@ sudo curl -X GET "0.0.0.0:9200/?pretty"
 
 sudo curl -X GET "0.0.0.0:9200/?pretty" -u elastic:5f8pVLPOpYbQIKThygpY
 
-sudo journalctl --unit elasticsearch
+systemctl status elasticsearch.service
 
 #######################
 ## Kibana

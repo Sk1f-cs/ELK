@@ -162,8 +162,29 @@ Zip file written to /usr/share/elasticsearch/elasticsearch-ssl-http.zip
 
 cd /usr/share/elasticsearch
 unzip elasticsearch-ssl-http.zip
-cp /usr/share/elasticsearch/elasticsearch/http.p12 /etc/elasticsearch/ 
+cp /usr/share/elasticsearch/elasticsearch/http.p12 /etc/elasticsearch/ #
 chown root.elasticsearch /etc/elasticsearch/http.p12
 chmod 660 /etc/elasticsearch/http.p12
 
 systemctl start elasticsearch
+
+curl --user elastic --insecure -X GET "https://192.168.0.15:9200/?pretty"
+
+#setting kibana
+
+cp /usr/share/elasticsearch/kibana/elasticsearch-ca.pem /etc/kibana/
+
+sudo nano /etc/kibana/kibana.yml
+
+elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/elasticsearch-ca.pem" ]
+elasticsearch.ssl.verificationMode: none
+
+curl --cacert /etc/kibana/elasticsearch-ca.pem https://localhost:9200/ -u elastic:5f8pVLPOpYbQIKThygpY -v 
+
+curl --cacert /etc/kibana/elasticsearch-ca.pem https://192.168.0.15:9200/ -u elastic:5f8pVLPOpYbQIKThygpY -v
+
+
+/usr/share/elasticsearch/kibana/elasticsearch-ca.pem
+* SSL: certificate subject name 'elasticsearch' does not match target host name 'localhost'
+
+curl --user elastic:5f8pVLPOpYbQIKThygpY --insecure -X GET "https://192.168.0.15:9200/?pretty"
