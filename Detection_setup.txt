@@ -198,6 +198,7 @@ ZWxhc3RpYzo1ZjhwVkxQT3BZYlFJS1RoeWdwWQ==
 
 xpack.encryptedSavedObjects.encryptionKey: 'ZWxhc3RpYzo1ZjhwVkxQT3BZYlFJS1RoeWdwWQ=='
 
+#=========================================================================================#
 
 # adding to metricbeat
 
@@ -229,3 +230,47 @@ setup.kibana.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12
 setup.kibana.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12
 setup.kibana.ssl.
 setup.kibana.ssl.
+
+#=======================================#
+
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12
+xpack.security.transport.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.keystore.path: "http.p12"
+
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: security/elastic-certificates.p12
+xpack.security.transport.ssl.truststore.path: security/elastic-certificates.p12
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12
+xpack.security.http.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12
+xpack.security.http.ssl.verification_mode: certificate
+
+### STEPS ###
+
+1. created directory : /home/es/config/certs
+2. copied certificates.p12 : cp /etc/elasticsearch/elastic-certificates.p12 /home/es/config/certs
+3. copied HTTP certs to the same directory : cp /etc/elasticsearch/http.p12 /home/es/config/certs
+
+4. For each additional Elastic product that you want to configure, copy the certificates to the relevant configuration directory. - ???
+Does it include beats products? If it does where are "relevant" configuration directories?
+
+5. cp elasticsearch-ssl-http.zip /home/es/config/certs
+6. unzip elasticsearch-ssl-http.zip
+7. copy http.p12 to /etc/elasticsearch/
+8. elasticsearch.yml :
+
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate 
+xpack.security.transport.ssl.keystore.path: /home/es/config/certs/elastic-certificates.p12 
+xpack.security.transport.ssl.truststore.path: /home/es/config/certs/elastic-certificates.p12 
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.verification_mode: certificate
+xpack.security.http.ssl.keystore.path: http.p12
+xpack.security.http.ssl.truststore.path: http.p12
+
+9. 
