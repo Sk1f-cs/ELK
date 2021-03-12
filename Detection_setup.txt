@@ -111,7 +111,7 @@ curl -X POST "http://192.168.0.15:9200/_license/start_trial?acknowledge=true&pre
   "type" : "trial"
 }
 
-/usr/share/elasticsearch/bin/elasticsearch-certutil  ca
+/usr/share/elasticsearch/bin/elasticsearch-certutil ca
 elastic-stack-ca.p12
 
 /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca elastic-stack-ca.p12
@@ -188,3 +188,44 @@ curl --cacert /etc/kibana/elasticsearch-ca.pem https://192.168.0.15:9200/ -u ela
 * SSL: certificate subject name 'elasticsearch' does not match target host name 'localhost'
 
 curl --user elastic:5f8pVLPOpYbQIKThygpY --insecure -X GET "https://192.168.0.15:9200/?pretty"
+
+#this
+curl --insecure -X GET "https://192.168.0.15:9200/?pretty" -u elastic:5f8pVLPOpYbQIKThygpY
+
+curl --cacert /etc/kibana/elasticsearch-ca.pem https://192.168.0.15:9200/ -u elastic:5f8pVLPOpYbQIKThygpY -v
+
+ZWxhc3RpYzo1ZjhwVkxQT3BZYlFJS1RoeWdwWQ==
+
+xpack.encryptedSavedObjects.encryptionKey: 'ZWxhc3RpYzo1ZjhwVkxQT3BZYlFJS1RoeWdwWQ=='
+
+
+# adding to metricbeat
+
+output.elasticsearch.hosts: ["https://192.168.0.15:9200"]
+output.elasticsearch.ssl.certificate_authorities: ["/etc/pki/root/ca.pem"]
+output.elasticsearch.ssl.certificate: "/etc/pki/client/cert.pem"
+output.elasticsearch.ssl.key: "/etc/pki/client/cert.key"
+
+#this one
+output.elasticsearch.ssl.certificate_authorities: [ "/etc/kibana/elasticsearch-ca.pem" ]
+output.elasticsearch.ssl.verificationMode: none
+output.elasticsearch.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12
+output.elasticsearch.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12
+output.elasticsearch.http.ssl.enabled: true
+output.elasticsearch.transport.ssl.enabled: true
+
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: elastic-certificates.p12
+xpack.security.transport.ssl.truststore.path: elastic-certificates.p12
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.keystore.path: "http.p12"
+
+#for kibana
+setup.kibana.host: "https://192.168.0.15:5601"
+setup.kibana.ssl.enabled: true
+setup.kibana.ssl.certificate_authorities: ["/etc/kibana/elasticsearch-ca.pem"]
+setup.kibana.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12
+setup.kibana.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12
+setup.kibana.ssl.
+setup.kibana.ssl.
