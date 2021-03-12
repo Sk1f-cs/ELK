@@ -257,7 +257,7 @@ xpack.security.http.ssl.verification_mode: certificate
 3. copied HTTP certs to the same directory : cp /etc/elasticsearch/http.p12 /home/es/config/certs
 
 4. For each additional Elastic product that you want to configure, copy the certificates to the relevant configuration directory. - ???
-Does it include beats products? If it does where are "relevant" configuration directories?
+Does it include beats products? If it does where are "relevant" configuration directories? under /etc/..?
 
 5. cp elasticsearch-ssl-http.zip /home/es/config/certs
 6. unzip elasticsearch-ssl-http.zip
@@ -273,4 +273,17 @@ xpack.security.http.ssl.verification_mode: certificate
 xpack.security.http.ssl.keystore.path: http.p12
 xpack.security.http.ssl.truststore.path: http.p12
 
-9. 
+9. Update all clients, tools, and applications that connect to Elasticsearch 
+to use the https protocol in their configuration URL. 
+For example, Kibana, Beats, Logstash, language clients, and custom applications. 
+
+- for me that is:
+/etc/kibana/kibana.yml
+/etc/filebeat/filebeat.yml      #protocol: "https" - for elasticsearch output
+/etc/auditbeat/auditbeat.yml    #protocol: "https"
+/etc/metricbeat/metricbeat.yml  #protocol: "https"
+/etc/metricbeat/modules.d/lasticsearch-xpack.yml  #https
+/etc/packetbeat/packetbeat.yml  #protocol: "https"
+
+10. Encrypting traffic between the browser and Kibana.
+https://www.elastic.co/guide/en/kibana/7.11/configuring-tls.html#configuring-tls-browser-kib
