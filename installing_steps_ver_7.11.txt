@@ -1,5 +1,5 @@
 #######################
-# Elasticsearch
+# 1 Elasticsearch
 #######################
 
 sudo apt-get update && sudo apt-get install elasticsearch
@@ -80,6 +80,9 @@ PASSWORD elastic = 5f8pVLPOpYbQIKThygpY
 
 #-=== For VB : 3last1c
 
+#-=== For Laptop VB : qwerty
+
+
 #######################
 ### Beats
 #######################
@@ -124,13 +127,16 @@ monitoring.enabled: true
 
 monitoring.elasticsearch:   # just uncomment
 
+http.enabled: true
+http.port: 5066
+
 cd /usr/bin/
 metricbeat test config -e
 
 # Configure metricbeat modules
 cd /etc/metricbeat/modules.d/
 
-/etc/metricbeat/modules.d/beat-xpack.yml
+sudo nano /etc/metricbeat/modules.d/beat-xpack.yml
 
 - module: beat
   xpack.enabled: true
