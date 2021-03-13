@@ -284,6 +284,9 @@ sudo auditbeat test config
 
 sudo auditbeat test output
 
+audit_rule_files: [ '${path.config}/audit.rules.d/*.conf' ]
+
+
 
 #######################
 # Packetbeat
