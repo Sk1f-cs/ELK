@@ -287,3 +287,19 @@ For example, Kibana, Beats, Logstash, language clients, and custom applications.
 
 10. Encrypting traffic between the browser and Kibana.
 https://www.elastic.co/guide/en/kibana/7.11/configuring-tls.html#configuring-tls-browser-kib
+
+
+bin/elasticsearch-certutil cert -name sk1f_kibana -dns localhost,192.168.0.15
+Certificates written to /usr/share/elasticsearch/sk1f_kibana.p12
+
+Certificates written to /usr/share/elasticsearch/certificate-bundle.zip
+
+/usr/share/elasticsearch/bin/elasticsearch-certutil cert -name sk1f_kibana -dns localhost,192.168.0.15 -pem   #here decided to use pem
+cp /usr/share/elasticsearch/certificate-bundle.zip /home/es/config/certs/
+
+11. cp /usr/share/elasticsearch/sk1f_kibana.p12 /home/es/config/certs/
+sudo cp certificate-bundle.zip /home/es/config/certs/kibana-server/           #  -tried to use pem format
+
+
+
+in kibana.yml : server.ssl.keystore.path: "/path/to/kibana-server.p12"
