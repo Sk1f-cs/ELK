@@ -1,0 +1,9 @@
+
+
+sudo auditbeat show auditd-rules        #to see current rules
+auditbeat show auditd-status
+
+/etc/auditbeat/audit.rules.d/auditBeatRules.conf
+
+audit_rule_files: [ '${path.config}/audit.rules.d/*.conf' ] #to replace rules
+
