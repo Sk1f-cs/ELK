@@ -298,8 +298,16 @@ Certificates written to /usr/share/elasticsearch/certificate-bundle.zip
 cp /usr/share/elasticsearch/certificate-bundle.zip /home/es/config/certs/
 
 11. cp /usr/share/elasticsearch/sk1f_kibana.p12 /home/es/config/certs/
-sudo cp certificate-bundle.zip /home/es/config/certs/kibana-server/           #  -tried to use pem format
-
-
+sudo cp certificate-bundle.zip /home/es/config/certs/kibana-server/           #  -tried to use pem format in case if p12 not going to work
 
 in kibana.yml : server.ssl.keystore.path: "/path/to/kibana-server.p12"
+
+server.ssl.keystore.path: /etc/kibana/sk1f_kibana.p12
+server.ssl.keystore.password: ""
+server.ssl.enabled: true
+
+elasticsearch.ssl.certificateAuthorities: ["/etc/kibana/elasticsearch-ca.pem"]
+
+chown root.elasticsearch /home/es/config/certs/
+chmod 660 /home/es/config/certs/
+
