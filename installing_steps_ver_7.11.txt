@@ -22,6 +22,8 @@ sudo curl -X GET "0.0.0.0:9200/?pretty"
 
 sudo curl -X GET "0.0.0.0:9200/?pretty" -u elastic:5f8pVLPOpYbQIKThygpY
 
+sudo curl -X GET "0.0.0.0:9200/?pretty" -u elastic:qwerty     #for lptpvb
+
 systemctl status elasticsearch.service
 
 #######################
@@ -281,6 +283,9 @@ sudo auditbeat test config
 
 
 sudo auditbeat test output
+
+audit_rule_files: [ '${path.config}/audit.rules.d/*.conf' ]
+
 
 
 #######################
