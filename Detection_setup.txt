@@ -311,3 +311,4 @@ elasticsearch.ssl.certificateAuthorities: ["/etc/kibana/elasticsearch-ca.pem"]
 chown root.elasticsearch /home/es/config/certs/
 chmod 660 /home/es/config/certs/
 
+chmod 660 /etc/kibana/sk1f_kibana.p12
