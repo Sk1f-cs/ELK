@@ -7,3 +7,5 @@ auditbeat show auditd-status
 
 audit_rule_files: [ '${path.config}/audit.rules.d/*.conf' ] #to replace rules
 
+
+
