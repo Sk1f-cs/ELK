@@ -1,0 +1,19 @@
+###
+# metricbeat
+###
+output.elasticsearch.ssl.certificate_authorities: ["/home/es/config/certs/ca/ca.p12"]
+output.elasticsearch.hosts: ["https://192.168.0.15:9200"]
+output.elasticsearch.ssl.certificate: /home/es/config/certs/elastic-certificates.p12
+
+setup.kibana.host: "https://192.168.0.15:5601"
+setup.kibana.ssl.enabled: true
+setup.kibana.ssl.certificate_authorities: ["/home/es/config/certs/ca/ca.p12"]
+setup.kibana.ssl.certificate: /home/es/config/certs/elastic-certificates.p12
+
+/home/es/config/certs/elastic-certificates.p12  #cert path
+
+/home/es/config/certs/ca/ca.p12 #ca path
+
+#Elastic conf
+network.host: 192.168.0.15
+
