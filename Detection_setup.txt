@@ -312,3 +312,13 @@ chown root.elasticsearch /home/es/config/certs/
 chmod 660 /home/es/config/certs/
 
 chmod 660 /etc/kibana/sk1f_kibana.p12
+
+
+xpack.lists.maxImportPayloadBytes: 9000000
+xpack.lists.importBufferSize: 1000
+
+
+#elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/elasticsearch-ca.pem" ]
+#elasticsearch.ssl.verificationMode: none
+
+xpack.encryptedSavedObjects.encryptionKey: 'ZWxhc3RpYzo1ZjhwVkxQT3BZYlFJS1RoeWdwWQ=='
